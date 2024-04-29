@@ -366,10 +366,11 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article" role="main">
                   
-  <div class="highlight-stata notranslate"><div class="highlight"><pre><span></span><span class="k"> recode</span> rSMGJcEdF_x (<span class="m">2</span><span class="o">/</span><span class="m">3</span>=<span class="m">0</span>),gen(donor)
-<span class="k"> tab</span> donor
+  <div class="highlight-stata notranslate"><div class="highlight"><pre><span></span><span class="k">global</span> repo https:<span class="o">//</span>github<span class="m">.</span>com<span class="o">/</span>muzaale<span class="o">/</span>forum<span class="o">/</span>raw<span class="o">/</span>main<span class="o">/</span>
+<span class="k">do</span> <span class="vg">${repo}</span>researchforum<span class="m">.</span>do
 </pre></div>
 </div>
+<p><img alt="" src="_images/risk.png" /></p>
 
     <script type="text/x-thebe-config">
     {
