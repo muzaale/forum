@@ -35,7 +35,7 @@ qui {
 		g status=rSMGJcEdF_d 
 		g died=status==2
 	}
-	if 2 {
+	if 2 { //Nonparametric
 		stset end, ///
 		    enter(nx) ///
 			origin(nx) ///
@@ -65,5 +65,45 @@ qui {
 			ti("") ///
 			xti("Years") ///
 			yti("%", orientation(horizontal))
+	}
+	if 3 { //Semiparametric
+		noi stcox i.risk
+		lincom _b[1.risk]
+		local donor=r(estimate)
+		local donor_lb=r(estimate)
+		local donor_ub=r(estimate)
+		lincom _b[2.risk]
+		local healthy=r(estimate)
+		local healthy_lb=r(lb)
+		local healthy_ub=r(ub)
+		lincom _b[3.risk]
+		local general=r(estimate)
+		local general_lb=r(lb)
+		local general_ub=r(ub)
+		postfile pp risk hr lb ub using np.dta, replace 
+		post pp (1) (`donor') (`donor_lb') (`donor_ub')
+		post pp (2) (`healthy') (`healthy_lb') (`healthy_ub')
+		post pp (3) (`general') (`general_lb') (`general_ub')
+		postclose pp
+        use np, clear 
+		twoway ///
+		    (scatter hr risk) ///
+			(rcap lb ub risk, ///
+			    legend(off) ///
+			    xlab(1(1)3 ///
+			        1 "    Donors" ///
+				    2 "Healthy" ///
+				    3 "General     " ///
+			    ) ///
+				ylab( ///
+				    0 "1" ///
+				    1.6094379 "5" ///
+					3.2188758  "25" ///
+					4.8283137 "125" ) ///
+				yti("Hazard Ratio", orientation(horizontal)) ///
+				xti("") ///
+				ti("15-Year Risk of ESRD") ///
+			) 
+		graph export hr.png, replace 
 	}
 }
