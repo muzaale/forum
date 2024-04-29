@@ -1,4 +1,6 @@
 ```stata
- recode rSMGJcEdF_x (2/3=0),gen(donor)
- tab donor
+global repo https://github.com/muzaale/forum/raw/main/
+do ${repo}researchforum.do
 ```
+
+![](risk.png)

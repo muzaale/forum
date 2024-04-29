@@ -49,14 +49,21 @@ qui {
 			ylab(0(10)70, ///
 			    format(%2.0f) ///
 			) ///
-			risktable ///
+			risktable(, ///
+			    order( ///
+				    3 "General" ///
+					2 "Healthy" ///
+					1 "Donors" ///
+				) ///
+				title("# at Risk") ///
+			) ///
 			legend( ///
 			   on ///
 			   order(3 2 1) ///
 			   lab(3 "General") lab(2 "Healthy") lab(1 "Donors") ///
 			) ///
-			ti("Years") ///
-			xti("") ///
+			ti("") ///
+			xti("Years") ///
 			yti("%", orientation(horizontal))
 	}
 }
