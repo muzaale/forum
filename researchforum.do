@@ -145,10 +145,28 @@ noi {
 			healthy /// very powerful, beware
 			if donor !=1, ///
 			    basesurv(s0)
+		//
+		preserve
+		    keep s0 _t _d _t0
+			g donor=0
+			save s0_nondonor, replace 
+		restore
 		matrix define m = r(table)
-		matrix b = e(b)
-		matrix V = e(V)
-		matrix list b 
+		matrix beta = e(b)
+		svmat beta 
+		preserve
+		    keep beta*
+			drop if missing(beta1)
+			save b_nondonor.dta, replace 
+		restore 
+		matrix vcov = e(V)
+		svmat vcov
+		preserve
+		    keep vcov*
+			drop if missing(vcov1)
+			save V_nondonor.dta, replace 
+		restore 
+		//matrix list beta 
 		matrix SV = (60, 1, 1, 0, 0, 27, 0, 0, 1, 0, 120, 0, 0, 90, 10, 1)    
 		matrix risk_score = SV * b'
 		matrix list risk_score 
@@ -156,18 +174,18 @@ noi {
 		//15-year mortality for scenario 
         gen f0 = (1 - s0) * 100
         gen f1 = f0 * exp(risk_score[1,1])
-        drop if _t > 15
+        //drop if _t > 15
         line f1 _t, ///
 		    sort connect(step step) ///
 			ylab(0(10)40) xlab(0(3)15) ///
 			yti("") ///
 			ti("Clinical Scenario, %", pos(11)) ///
 			xti("Years") ///
-			note("60yo, female, BMI=27kg/m2, no hypertension," ///
-			     "no history of smoking, white, graduate, " ///
-				 "SBP=120mmHg, eGFR=90ml/min, uACR=10mg/g, " ///
-				 "healthy",size(1.5))
-		graph export personalized.png, replace 
+			note("60yo, female, white, BMI=27kg/m2, graduate, SBP=120mmHg," ///
+			     " no hypertension, no history of smoking" ///
+				 "eGFR=90ml/min, uACR=10mg/g, healthy" ///
+                  ,size(1.5))
+		//graph export personalized.png, replace 
 	}
 	if 7 == 0 { 
         scalar total_risk_score = 0
@@ -179,5 +197,55 @@ noi {
         di "Hazard Ratio: " hazard_ratio
 		g f0 = (1 - s0) * 100
 		g f1 = f0 * exp(total_risk_score) 
+	}
+	if 8 == 8 {
+		capture drop s0 beta* vcov* f0 f1 
+		stcox ///
+		    don_age ///
+			don_female ///
+			i.don_race_eth ///
+			if donor ==1, ///
+			    basesurv(s0)
+		//
+		preserve
+		    keep s0 _t _d _t0
+			g donor=1
+			save s0_donor, replace 
+		restore
+		matrix define m = r(table)
+		matrix beta = e(b)
+		svmat beta 
+		preserve
+		    keep beta*
+			drop if missing(beta1)
+			save b_donor.dta, replace 
+		restore 
+		matrix vcov = e(V)
+		svmat vcov
+		preserve
+		    keep vcov*
+			drop if missing(vcov1)
+			save V_donor.dta, replace 
+		restore 
+		//matrix list beta 
+		matrix SV = (60, 1, 1, 0, 0, 27, 0, 0, 1, 0, 120, 0, 0, 90, 10, 1)    
+		matrix risk_score = SV * b'
+		matrix list risk_score 
+		di exp(risk_score[1,1])
+		//15-year mortality for scenario 
+        gen f0 = (1 - s0) * 100
+        gen f1 = f0 * exp(risk_score[1,1])
+        //drop if _t > 15
+        line f1 _t, ///
+		    sort connect(step step) ///
+			ylab(0(10)40) xlab(0(3)15) ///
+			yti("") ///
+			ti("Clinical Scenario, %", pos(11)) ///
+			xti("Years") ///
+			note("60yo, female, white, BMI=27kg/m2, graduate, SBP=120mmHg," ///
+			     " no hypertension, no history of smoking" ///
+				 "eGFR=90ml/min, uACR=10mg/g, healthy" ///
+				 ,size(1.5))
+		//graph export personalized_donor.png, replace 
 	}
 }
