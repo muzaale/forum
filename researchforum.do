@@ -34,13 +34,13 @@ qui {
 		g risk=rSMGJcEdF_x 
 		g status=rSMGJcEdF_d 
 		g died=status==2
-	}
-	if 2 { //Nonparametric
 		stset end, ///
 		    enter(nx) ///
 			origin(nx) ///
 			fail(died) ///
 			scale(365.25)
+	}
+	if 0 { //Nonparametric
 		sts graph if don_age > 60, ///
 		    by(risk) ///
 		    fail ///
@@ -50,6 +50,7 @@ qui {
 			    format(%2.0f) ///
 			) ///
 			risktable(, ///
+			    color(green) ///
 			    order( ///
 				    3 "General" ///
 					2 "Healthy" ///
@@ -57,16 +58,23 @@ qui {
 				) ///
 				title("# at Risk") ///
 			) ///
+			risktable(, color(stc3) group (#3)) ///
+			risktable(, color(stc2) group (#2)) ///
+			risktable(, color(stc1) group(#1)) ///
 			legend( ///
 			   on ///
 			   order(3 2 1) ///
-			   lab(3 "General") lab(2 "Healthy") lab(1 "Donors") ///
+			   lab(3 "General") ///
+			   lab(2 "Healthy") ///
+			   lab(1 "Donors") ///
+			   ring(0) pos(11) ///
 			) ///
-			ti("") ///
+			ti("Mortality", pos(11)) ///
 			xti("Years") ///
 			yti("%", orientation(horizontal))
+		graph export risk.png, replace 
 	}
-	if 3 { //Semiparametric
+	if 1 { //Semiparametric
 		noi stcox i.risk
 		lincom _b[1.risk]
 		local donor=r(estimate)
@@ -102,7 +110,7 @@ qui {
 					4.8283137 "125" ) ///
 				yti("Hazard Ratio", orientation(horizontal)) ///
 				xti("") ///
-				ti("15-Year Risk of ESRD") ///
+				ti("15-Year Risk of ESRD", pos(11)) ///
 			) 
 		graph export hr.png, replace 
 	}
