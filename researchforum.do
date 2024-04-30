@@ -161,12 +161,13 @@ noi {
 		    sort connect(step step) ///
 			ylab(0(10)40) xlab(0(3)15) ///
 			yti("") ///
-			ti("Personalized Risk, %", pos(11)) ///
+			ti("Clinical Scenario, %", pos(11)) ///
 			xti("Years") ///
 			note("60yo, female, BMI=27kg/m2, no hypertension," ///
 			     "no history of smoking, white, graduate, " ///
 				 "SBP=120mmHg, eGFR=90ml/min, uACR=10mg/g, " ///
 				 "healthy",size(1.5))
+		graph export personalized.png, replace 
 	}
 	if 7 == 0 { 
         scalar total_risk_score = 0
