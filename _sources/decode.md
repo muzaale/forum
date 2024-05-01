@@ -3,6 +3,8 @@ global repo https://github.com/muzaale/forum/raw/main/
 do ${repo}researchforum.do
 do ${repo}encode.do
 do ${repo}donor_live.do
+do ${repo}rdc.do
+
 ```    
 ### Nonparametric
 ![](risk.png)
@@ -12,4 +14,8 @@ do ${repo}donor_live.do
 
 ### Personalized
 ![](personalized.png)
+
+
+
+
 
