@@ -15,6 +15,10 @@ do ${repo}rdc.do
 ### Personalized
 ![](personalized.png)
 
+### Aim 1
+
+![](aim1.png)
+
 
 
 
