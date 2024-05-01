@@ -1,9 +1,7 @@
 ```stata
 global repo https://github.com/muzaale/forum/raw/main/
-do ${repo}researchforum.do
-do ${repo}encode.do
-do ${repo}donor_live.do
-do ${repo}rdc.do
+do ${repo}donors.do
+do ${repo}nondonors.do
 
 ``` 
 # Mortality: Aim 1   
