@@ -5,7 +5,8 @@ do ${repo}encode.do
 do ${repo}donor_live.do
 do ${repo}rdc.do
 
-```    
+``` 
+# Mortality: Aim 1   
 ### Nonparametric
 ![](risk.png)
 
@@ -13,12 +14,27 @@ do ${repo}rdc.do
 ![](hr.png)
 
 ### Personalized
-![](personalized.png)
-
-### Aim 1
-
 ![](aim1.png)
 
+# ESRD: Aim 2   
+### Nonparametric
+![](risk_esrd.png)
+
+### Semparametric
+![](hr_esrd.png)
+
+### Personalized 
+![](aim2.png)
+
+# Hositalization: Aim 3  
+### Nonparametric
+![](risk_hosp.png)
+
+### Semparametric
+![](hr_hosp.png)
+
+### Personalized 
+![](aim3.png)
 
 
 
