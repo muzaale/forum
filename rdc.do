@@ -16,13 +16,18 @@ qui {
 		keep s0_nondonor _t
 		save s0_nondonor, replace 
 	}
-	if 3 == 3 {
+	if 3.1 == 3.1 {
 		import excel "${repo}/cox_coef_mort.xlsx", sheet("Sheet1") clear
 		drop A C E G J L N AE AH AM AW
 		ds 
 		mkmat `r(varlist)', matrix(b_nondonor)
 	}
-	if 4 == 4 {
+	if 3.2 == 3.2 {
+		use b_donor, replace 
+		ds 
+		mkmat `r(varlist)', matrix(b_donor )
+	}
+	if 4.1 == 4.1 {
 		matrix SV_nondonor = ///
 		    ( ///
 			0 , /// dm
@@ -65,7 +70,7 @@ qui {
 			0 , /// some coll or associate
 			0 , /// > high schol
 			0 , /// refused 
-			-20 , /// age; all these are centered
+		  -20 , /// age; all these are centered
 			0 , /// sbp
 			0 , /// dbp
 			0 , /// bmi 
@@ -74,19 +79,41 @@ qui {
 			0   /// hba1c or ghb ///
 			)
 	}
-	if 5 == 5 {
+	if 4.2 == 4.2 {
+		matrix SV_donor = ///
+		    ( ///
+		  -20 , /// age; all these are centered
+			0 , /// female 
+			0 , /// white 
+			0 , /// black
+			0 , /// hisp
+			0   /// other 
+			)
+	}
+	if 5.1 == 5.1 {
 		matrix risk_score_nondonor = SV_nondonor * b_nondonor'
 		noi matrix list risk_score_nondonor
 		noi di exp(risk_score_nondonor[1,1])
 	}
+	if 5.2 == 5.2 {
+		matrix risk_score_donor = SV_donor * b_donor'
+		noi matrix list risk_score_donor
+		noi di exp(risk_score_donor[1,1])
+	}
 	if 6 == 6 {
 		//nonparametric
 		use s0_nondonor, clear
+		append using s0_donor
 		g f0_nondonor = (1 - s0_nondonor) * 100 
+		g f0_donor = (1 - s0_donor) * 100 
 		//semiparametric
 		g f1_nondonor = f0_nondonor * exp(risk_score_nondonor[1,1])
+		g f1_donor = f0_donor * exp(risk_score_donor[1,1]) 
 	}
 	if 7 == 7 {
+		//visualization
+		line f1_donor _t, ///
+		    sort connect(step step) || ///
 		line f1_nondonor _t, ///
 		    sort connect(step step) ///
 			legend( ///
@@ -104,7 +131,7 @@ qui {
 				 "eGFR=90ml/min, uACR=10mg/g" ///
                   ,size(1.5) ///
 		)
-		//graph export personalized.png, replace 
+		graph export aim1.png, replace 
 	}
 }
 
